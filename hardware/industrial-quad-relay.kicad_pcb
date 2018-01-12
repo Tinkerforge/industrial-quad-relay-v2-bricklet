@@ -3,7 +3,7 @@
   (general
     (links 61)
     (no_connects 0)
-    (area 97.609659 37.858699 137.993121 78.242161)
+    (area 96.944659 37.193699 278.24557 168.441053)
     (thickness 1.6002)
     (drawings 22)
     (tracks 272)
@@ -15,10 +15,11 @@
   (page A4)
   (title_block
     (title "Industrial Quad Relay Bricklet")
-    (rev 1.1)
+    (date 2018-01-12)
+    (rev 2.0)
     (company "Tinkerforge GmbH")
     (comment 1 "Licensed under CERN OHL v.1.1")
-    (comment 2 "Copyright (©) 2013, B.Nordmeyer <bastian@tinkerforge.com>")
+    (comment 2 "Copyright (©) 2018, B.Nordmeyer <bastian@tinkerforge.com>")
   )
 
   (layers
@@ -42,7 +43,7 @@
   )
 
   (setup
-    (last_trace_width 0.50038)
+    (last_trace_width 0.14986)
     (user_trace_width 0.14986)
     (user_trace_width 0.29972)
     (user_trace_width 0.50038)
@@ -6801,7 +6802,7 @@
   (gr_text Status (at 98.9 50 270) (layer F.SilkS)
     (effects (font (size 0.70104 0.70104) (thickness 0.14986)))
   )
-  (gr_text "Copyright Tinkerforge GmbH 2013.\nThis documentation describes Open Hardware and is licensed under the\nCERN OHL v. 1.1.\nYou may redistribute and modify this documentation under the terms of the\nCERN OHL v.1.1. (http://ohwr.org/cernohl). This documentation is distributed\nWITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF\nMERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A\nPARTICULAR PURPOSE. Please see the CERN OHL v.1.1 for applicable\nconditions" (at 254.29972 162.10026) (layer Cmts.User)
+  (gr_text "Copyright Tinkerforge GmbH 2018.\nThis documentation describes Open Hardware and is licensed under the\nCERN OHL v. 1.1.\nYou may redistribute and modify this documentation under the terms of the\nCERN OHL v.1.1. (http://ohwr.org/cernohl). This documentation is distributed\nWITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF\nMERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A\nPARTICULAR PURPOSE. Please see the CERN OHL v.1.1 for applicable\nconditions" (at 253.4 153.85) (layer Cmts.User)
     (effects (font (size 0.8001 0.8001) (thickness 0.200025)))
   )
   (gr_text "max 30V" (at 101.84892 67.80022 90) (layer F.SilkS)
