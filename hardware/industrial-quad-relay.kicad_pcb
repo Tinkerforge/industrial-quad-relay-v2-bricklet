@@ -7022,7 +7022,7 @@
   (gr_text 0 (at 107.35056 64.49822) (layer F.SilkS)
     (effects (font (size 1.00076 1.00076) (thickness 0.14986)))
   )
-  (gr_text "Industrial Quad Relay\n2.0" (at 134.9 58.025 90) (layer F.SilkS)
+  (gr_text "Industrial Quad Relay\n2.0" (at 135.8 58.05 90) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (gr_text tinkerforge.com (at 126.3 50.45) (layer F.SilkS)
