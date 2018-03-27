@@ -44,7 +44,7 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 
 BootloaderHandleMessageResponse set_output_value(const SetOutputValue *data) {
 	for(uint8_t i = 0; i < RELAY_NUM; i++) {
-		relay_set(i, data->value & (1 << i));
+		relay_set(i, data->value[i]);
 		relay.monoflop_done[i] = true;
 	}
 
@@ -53,51 +53,54 @@ BootloaderHandleMessageResponse set_output_value(const SetOutputValue *data) {
 
 BootloaderHandleMessageResponse get_output_value(const GetOutputValue *data, GetOutputValue_Response *response) {
 	response->header.length = sizeof(GetOutputValue_Response);
-	response->value         = (relay_get(0) << 0) | (relay_get(1) << 1) | (relay_get(2) << 2) | (relay_get(3) << 3);
+	response->value[0]      = relay_get(0);
+	response->value[1]      = relay_get(1);
+	response->value[2]      = relay_get(2);
+	response->value[3]      = relay_get(3);
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
 BootloaderHandleMessageResponse set_monoflop(const SetMonoflop *data) {
-	if(data->pin > RELAY_NUM) {
+	if(data->channel > RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	relay.monoflop_done[data->pin]       = false;
-	relay.monoflop_time_start[data->pin] = system_timer_get_ms();
-	relay.monoflop_time[data->pin]       = data->time;
-	relay.monoflop_value[data->pin]      = data->value;
+	relay.monoflop_done[data->channel]       = false;
+	relay.monoflop_time_start[data->channel] = system_timer_get_ms();
+	relay.monoflop_time[data->channel]       = data->time;
+	relay.monoflop_value[data->channel]      = data->value;
 
-	relay_set(data->pin, data->value);
+	relay_set(data->channel, data->value);
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
 BootloaderHandleMessageResponse get_monoflop(const GetMonoflop *data, GetMonoflop_Response *response) {
-	if(data->pin > RELAY_NUM) {
+	if(data->channel > RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	uint32_t diff = system_timer_get_ms() - relay.monoflop_time_start[data->pin];
-	if((relay.monoflop_done[data->pin]) || (relay.monoflop_time[data->pin] == 0)) {
+	uint32_t diff = system_timer_get_ms() - relay.monoflop_time_start[data->channel];
+	if((relay.monoflop_done[data->channel]) || (relay.monoflop_time[data->channel] == 0)) {
 		diff = 0;
 	}
 
 	response->header.length  = sizeof(GetMonoflop_Response);
-	response->time           = relay.monoflop_time[data->pin];
-	response->time_remaining = diff > relay.monoflop_time[data->pin] ? 0 : diff;
-	response->value          = relay_get(data->pin);
+	response->time           = relay.monoflop_time[data->channel];
+	response->time_remaining = diff > relay.monoflop_time[data->channel] ? 0 : diff;
+	response->value          = relay_get(data->channel);
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
 BootloaderHandleMessageResponse set_selected_output_value(const SetSelectedOutputValue *data) {
-	if(data->pin > RELAY_NUM) {
+	if(data->channel > RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	relay_set(data->pin, data->value);
-	relay.monoflop_done[data->pin] = true;
+	relay_set(data->channel, data->value);
+	relay.monoflop_done[data->channel] = true;
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
@@ -114,7 +117,7 @@ bool handle_monoflop_done_callback(void) {
 		for(; i < RELAY_NUM; i++) {
 			if(relay.monoflop_callback[i]) {
 				tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(MonoflopDone_Callback), FID_CALLBACK_MONOFLOP_DONE);
-				cb.pin                     = i;
+				cb.channel                 = i;
 				cb.value                   = relay_get(i);
 				relay.monoflop_callback[i] = false;
 				break;
