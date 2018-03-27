@@ -63,7 +63,7 @@ void communication_init(void);
 
 typedef struct {
 	TFPMessageHeader header;
-	uint8_t value;
+	bool value[4];
 } __attribute__((__packed__)) SetOutputValue;
 
 typedef struct {
@@ -72,19 +72,19 @@ typedef struct {
 
 typedef struct {
 	TFPMessageHeader header;
-	uint8_t value;
+	bool value[4];
 } __attribute__((__packed__)) GetOutputValue_Response;
 
 typedef struct {
 	TFPMessageHeader header;
-	uint8_t pin;
+	uint8_t channel;
 	bool value;
 	uint32_t time;
 } __attribute__((__packed__)) SetMonoflop;
 
 typedef struct {
 	TFPMessageHeader header;
-	uint8_t pin;
+	uint8_t channel;
 } __attribute__((__packed__)) GetMonoflop;
 
 typedef struct {
@@ -96,13 +96,13 @@ typedef struct {
 
 typedef struct {
 	TFPMessageHeader header;
-	uint8_t pin;
+	uint8_t channel;
 	bool value;
 } __attribute__((__packed__)) MonoflopDone_Callback;
 
 typedef struct {
 	TFPMessageHeader header;
-	uint8_t pin;
+	uint8_t channel;
 	bool value;
 } __attribute__((__packed__)) SetSelectedOutputValue;
 
