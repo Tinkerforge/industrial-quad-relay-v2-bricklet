@@ -50,6 +50,28 @@ void relay_init(void) {
 	for(uint8_t i = 0; i < RELAY_NUM; i++) {
 		XMC_GPIO_Init(RELAY_PORT, relay_pins[i], &button_pin_config);
 		relay.monoflop_done[i] = true;
+
+		// Init info LEDs
+		relay.info_leds[i].port_base = (XMC_GPIO_PORT_t *)PORT0_BASE;
+
+		if(i == 0) {
+			relay.info_leds[i].pin = 12;
+		}
+		else if(i == 1) {
+			relay.info_leds[i].pin = 9;
+		}
+		else if(i == 2) {
+			relay.info_leds[i].pin = 8;
+		}
+		else if(i == 3) {
+			relay.info_leds[i].pin = 7;
+		}
+
+		button_pin_config.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH;
+		XMC_GPIO_Init(relay.info_leds[i].port_base, relay.info_leds[i].pin, &button_pin_config);
+
+		relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
+		relay.info_leds[i].config = INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_SHOW_CHANNEL_STATUS;
 	}
 }
 
@@ -61,6 +83,48 @@ void relay_tick(void) {
 				relay.monoflop_callback[i] = true;
 				relay.monoflop_done[i]     = true;
 			}
+		}
+
+		// Manage info LEDs
+		switch (relay.info_leds[i].config) {
+			case INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_OFF:
+				relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
+				XMC_GPIO_SetOutputHigh(relay.info_leds[i].port_base, relay.info_leds[i].pin); // Info LED off
+
+				break;
+
+			case INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_ON:
+				relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_ON;
+				XMC_GPIO_SetOutputLow(relay.info_leds[i].port_base, relay.info_leds[i].pin); // Info LED on
+
+				break;
+
+			case INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_SHOW_HEARTBEAT:
+				relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_HEARTBEAT;
+
+				led_flicker_tick(&relay.info_leds[i].info_led_flicker_state,
+				                 system_timer_get_ms(),
+				                 relay.info_leds[i].port_base,
+				                 relay.info_leds[i].pin);
+
+				break;
+
+			case INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_SHOW_CHANNEL_STATUS:
+				relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
+
+				if(relay_get(i)) {
+					// Input channel has logic high
+					XMC_GPIO_SetOutputLow(relay.info_leds[i].port_base, relay.info_leds[i].pin); // Info LED on
+				}
+				else {
+					// Input channel has logic low
+					XMC_GPIO_SetOutputHigh(relay.info_leds[i].port_base, relay.info_leds[i].pin); // Info LED off
+				}
+
+				break;
+
+			default:
+				break;
 		}
 	}
 }
