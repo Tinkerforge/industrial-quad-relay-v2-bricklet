@@ -37,8 +37,8 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_SET_MONOFLOP: return set_monoflop(message);
 		case FID_GET_MONOFLOP: return get_monoflop(message, response);
 		case FID_SET_SELECTED_OUTPUT_VALUE: return set_selected_output_value(message);
-		case FID_SET_INFO_LED_CONFIG: return set_info_led_config(message);
-		case FID_GET_INFO_LED_CONFIG: return get_info_led_config(message, response);
+		case FID_SET_CHANNEL_LED_CONFIG: return set_channel_led_config(message);
+		case FID_GET_CHANNEL_LED_CONFIG: return get_channel_led_config(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -107,24 +107,24 @@ BootloaderHandleMessageResponse set_selected_output_value(const SetSelectedOutpu
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
-BootloaderHandleMessageResponse set_info_led_config(const SetInfoLEDConfig *data) {
+BootloaderHandleMessageResponse set_channel_led_config(const SetChannelLEDConfig *data) {
 	if(data->led > RELAY_NUM - 1) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	relay.info_leds[data->led].config = data->config;
+	relay.channel_leds[data->led].config = data->config;
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
-BootloaderHandleMessageResponse get_info_led_config(const GetInfoLEDConfig *data, GetInfoLEDConfig_Response *response) {
-	response->header.length = sizeof(GetInfoLEDConfig_Response);
+BootloaderHandleMessageResponse get_channel_led_config(const GetChannelLEDConfig *data, GetChannelLEDConfig_Response *response) {
+	response->header.length = sizeof(GetChannelLEDConfig_Response);
 
 	if(data->led > RELAY_NUM - 1) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	response->config = relay.info_leds[data->led].config;
+	response->config = relay.channel_leds[data->led].config;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
