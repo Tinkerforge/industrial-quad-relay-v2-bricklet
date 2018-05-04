@@ -36,8 +36,8 @@ typedef struct {
 	uint8_t pin;
 	uint8_t config;
 	XMC_GPIO_PORT_t *port_base;
-	LEDFlickerState info_led_flicker_state;
-} INFO_LED_CONFIG_t;
+	LEDFlickerState channel_led_flicker_state;
+} CHANNEL_LED_CONFIG_t;
 
 typedef struct {
 	uint32_t monoflop_time[RELAY_NUM];
@@ -45,7 +45,7 @@ typedef struct {
 	bool monoflop_value[RELAY_NUM];
 	bool monoflop_done[RELAY_NUM];
 	bool monoflop_callback[RELAY_NUM];
-	INFO_LED_CONFIG_t info_leds[RELAY_NUM];
+	CHANNEL_LED_CONFIG_t channel_leds[RELAY_NUM];
 } Relay;
 
 bool relay_get(const uint8_t pin);

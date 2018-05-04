@@ -52,27 +52,27 @@ void relay_init(void) {
 		XMC_GPIO_Init(relay_ports[i], relay_pins[i], &button_pin_config);
 		relay.monoflop_done[i] = true;
 
-		// Init info LEDs
-		relay.info_leds[i].port_base = (XMC_GPIO_PORT_t *)PORT0_BASE;
+		// Init channel LEDs
+		relay.channel_leds[i].port_base = (XMC_GPIO_PORT_t *)PORT0_BASE;
 
 		if(i == 0) {
-			relay.info_leds[i].pin = 12;
+			relay.channel_leds[i].pin = 12;
 		}
 		else if(i == 1) {
-			relay.info_leds[i].pin = 9;
+			relay.channel_leds[i].pin = 9;
 		}
 		else if(i == 2) {
-			relay.info_leds[i].pin = 8;
+			relay.channel_leds[i].pin = 8;
 		}
 		else if(i == 3) {
-			relay.info_leds[i].pin = 7;
+			relay.channel_leds[i].pin = 7;
 		}
 
 		button_pin_config.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH;
-		XMC_GPIO_Init(relay.info_leds[i].port_base, relay.info_leds[i].pin, &button_pin_config);
+		XMC_GPIO_Init(relay.channel_leds[i].port_base, relay.channel_leds[i].pin, &button_pin_config);
 
-		relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
-		relay.info_leds[i].config = INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_SHOW_CHANNEL_STATUS;
+		relay.channel_leds[i].channel_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
+		relay.channel_leds[i].config = INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_SHOW_CHANNEL_STATUS;
 	}
 }
 
@@ -86,40 +86,40 @@ void relay_tick(void) {
 			}
 		}
 
-		// Manage info LEDs
-		switch (relay.info_leds[i].config) {
-			case INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_OFF:
-				relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
-				XMC_GPIO_SetOutputHigh(relay.info_leds[i].port_base, relay.info_leds[i].pin); // Info LED off
+		// Manage channel LEDs
+		switch (relay.channel_leds[i].config) {
+			case INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_OFF:
+				relay.channel_leds[i].channel_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
+				XMC_GPIO_SetOutputHigh(relay.channel_leds[i].port_base, relay.channel_leds[i].pin); // Channel LED off
 
 				break;
 
-			case INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_ON:
-				relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_ON;
-				XMC_GPIO_SetOutputLow(relay.info_leds[i].port_base, relay.info_leds[i].pin); // Info LED on
+			case INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_ON:
+				relay.channel_leds[i].channel_led_flicker_state.config = LED_FLICKER_CONFIG_ON;
+				XMC_GPIO_SetOutputLow(relay.channel_leds[i].port_base, relay.channel_leds[i].pin); // Channel LED on
 
 				break;
 
-			case INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_SHOW_HEARTBEAT:
-				relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_HEARTBEAT;
+			case INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_SHOW_HEARTBEAT:
+				relay.channel_leds[i].channel_led_flicker_state.config = LED_FLICKER_CONFIG_HEARTBEAT;
 
-				led_flicker_tick(&relay.info_leds[i].info_led_flicker_state,
+				led_flicker_tick(&relay.channel_leds[i].channel_led_flicker_state,
 				                 system_timer_get_ms(),
-				                 relay.info_leds[i].port_base,
-				                 relay.info_leds[i].pin);
+				                 relay.channel_leds[i].port_base,
+				                 relay.channel_leds[i].pin);
 
 				break;
 
-			case INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_SHOW_CHANNEL_STATUS:
-				relay.info_leds[i].info_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
+			case INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_SHOW_CHANNEL_STATUS:
+				relay.channel_leds[i].channel_led_flicker_state.config = LED_FLICKER_CONFIG_OFF;
 
 				if(relay_get(i)) {
 					// Input channel has logic high
-					XMC_GPIO_SetOutputLow(relay.info_leds[i].port_base, relay.info_leds[i].pin); // Info LED on
+					XMC_GPIO_SetOutputLow(relay.channel_leds[i].port_base, relay.channel_leds[i].pin); // Channel LED on
 				}
 				else {
 					// Input channel has logic low
-					XMC_GPIO_SetOutputHigh(relay.info_leds[i].port_base, relay.info_leds[i].pin); // Info LED off
+					XMC_GPIO_SetOutputHigh(relay.channel_leds[i].port_base, relay.channel_leds[i].pin); // Channel LED off
 				}
 
 				break;

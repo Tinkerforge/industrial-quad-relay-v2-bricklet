@@ -34,10 +34,10 @@ void communication_tick(void);
 void communication_init(void);
 
 // Constants
-#define INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_OFF 0
-#define INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_ON 1
-#define INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_SHOW_HEARTBEAT 2
-#define INDUSTRIAL_QUAD_RELAY_V2_INFO_LED_CONFIG_SHOW_CHANNEL_STATUS 3
+#define INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_OFF 0
+#define INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_ON 1
+#define INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_SHOW_HEARTBEAT 2
+#define INDUSTRIAL_QUAD_RELAY_V2_CHANNEL_LED_CONFIG_SHOW_CHANNEL_STATUS 3
 
 #define INDUSTRIAL_QUAD_RELAY_V2_BOOTLOADER_MODE_BOOTLOADER 0
 #define INDUSTRIAL_QUAD_RELAY_V2_BOOTLOADER_MODE_FIRMWARE 1
@@ -63,8 +63,8 @@ void communication_init(void);
 #define FID_SET_MONOFLOP 3
 #define FID_GET_MONOFLOP 4
 #define FID_SET_SELECTED_OUTPUT_VALUE 5
-#define FID_SET_INFO_LED_CONFIG 6
-#define FID_GET_INFO_LED_CONFIG 7
+#define FID_SET_CHANNEL_LED_CONFIG 6
+#define FID_GET_CHANNEL_LED_CONFIG 7
 
 #define FID_CALLBACK_MONOFLOP_DONE 8
 
@@ -111,17 +111,17 @@ typedef struct {
 	TFPMessageHeader header;
 	uint8_t led;
 	uint8_t config;
-} __attribute__((__packed__)) SetInfoLEDConfig;
+} __attribute__((__packed__)) SetChannelLEDConfig;
 
 typedef struct {
 	TFPMessageHeader header;
 	uint8_t led;
-} __attribute__((__packed__)) GetInfoLEDConfig;
+} __attribute__((__packed__)) GetChannelLEDConfig;
 
 typedef struct {
 	TFPMessageHeader header;
 	uint8_t config;
-} __attribute__((__packed__)) GetInfoLEDConfig_Response;
+} __attribute__((__packed__)) GetChannelLEDConfig_Response;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -136,8 +136,8 @@ BootloaderHandleMessageResponse get_output_value(const GetOutputValue *data, Get
 BootloaderHandleMessageResponse set_monoflop(const SetMonoflop *data);
 BootloaderHandleMessageResponse get_monoflop(const GetMonoflop *data, GetMonoflop_Response *response);
 BootloaderHandleMessageResponse set_selected_output_value(const SetSelectedOutputValue *data);
-BootloaderHandleMessageResponse set_info_led_config(const SetInfoLEDConfig *data);
-BootloaderHandleMessageResponse get_info_led_config(const GetInfoLEDConfig *data, GetInfoLEDConfig_Response *response);
+BootloaderHandleMessageResponse set_channel_led_config(const SetChannelLEDConfig *data);
+BootloaderHandleMessageResponse get_channel_led_config(const GetChannelLEDConfig *data, GetChannelLEDConfig_Response *response);
 
 // Callbacks
 bool handle_monoflop_done_callback(void);
