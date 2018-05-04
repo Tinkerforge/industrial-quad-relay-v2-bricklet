@@ -28,15 +28,16 @@
 #include "configs/config_relay.h"
 
 const uint8_t relay_pins[RELAY_NUM] = {RELAY0_PIN_NUM, RELAY1_PIN_NUM, RELAY2_PIN_NUM, RELAY3_PIN_NUM};
+XMC_GPIO_PORT_t *relay_ports[RELAY_NUM] = {RELAY0_PORT, RELAY1_PORT, RELAY2_PORT, RELAY3_PORT};
 
 Relay relay;
 
 bool relay_get(const uint8_t pin) {
-	return !XMC_GPIO_GetInput(RELAY_PORT, relay_pins[pin]);
+	return !XMC_GPIO_GetInput(relay_ports[pin], relay_pins[pin]);
 }
 
 void relay_set(const uint8_t pin, const bool value) {
-	XMC_GPIO_SetOutputLevel(RELAY_PORT, relay_pins[pin], value ? XMC_GPIO_OUTPUT_LEVEL_LOW : XMC_GPIO_OUTPUT_LEVEL_HIGH);
+	XMC_GPIO_SetOutputLevel(relay_ports[pin], relay_pins[pin], value ? XMC_GPIO_OUTPUT_LEVEL_LOW : XMC_GPIO_OUTPUT_LEVEL_HIGH);
 }
 
 void relay_init(void) {
@@ -48,7 +49,7 @@ void relay_init(void) {
 	};
 
 	for(uint8_t i = 0; i < RELAY_NUM; i++) {
-		XMC_GPIO_Init(RELAY_PORT, relay_pins[i], &button_pin_config);
+		XMC_GPIO_Init(relay_ports[i], relay_pins[i], &button_pin_config);
 		relay.monoflop_done[i] = true;
 
 		// Init info LEDs

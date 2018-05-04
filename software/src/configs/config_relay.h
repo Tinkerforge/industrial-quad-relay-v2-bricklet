@@ -24,10 +24,13 @@
 
 #include "xmc_gpio.h"
 
-#define RELAY_PORT     XMC_GPIO_PORT0
-#define RELAY0_PIN_NUM 12
-#define RELAY1_PIN_NUM 9
-#define RELAY2_PIN_NUM 8
-#define RELAY3_PIN_NUM 7
+#define RELAY0_PORT     XMC_GPIO_PORT1
+#define RELAY0_PIN_NUM 0
+#define RELAY1_PORT     XMC_GPIO_PORT0
+#define RELAY1_PIN_NUM 0
+#define RELAY2_PORT     XMC_GPIO_PORT0
+#define RELAY2_PIN_NUM 5
+#define RELAY3_PORT     XMC_GPIO_PORT0
+#define RELAY3_PIN_NUM 6
 
 #endif
