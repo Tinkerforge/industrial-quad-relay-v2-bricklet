@@ -70,7 +70,7 @@ void communication_init(void);
 
 typedef struct {
 	TFPMessageHeader header;
-	bool value[4];
+	uint8_t value;
 } __attribute__((__packed__)) SetValue;
 
 typedef struct {
@@ -79,7 +79,7 @@ typedef struct {
 
 typedef struct {
 	TFPMessageHeader header;
-	bool value[4];
+	uint8_t value;
 } __attribute__((__packed__)) GetValue_Response;
 
 typedef struct {

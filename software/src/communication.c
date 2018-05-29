@@ -46,7 +46,13 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 
 BootloaderHandleMessageResponse set_value(const SetValue *data) {
 	for(uint8_t i = 0; i < RELAY_NUM; i++) {
-		relay_set(i, data->value[i]);
+		if (data->value & (1 << i)) {
+			relay_set(i, true);
+		}
+		else {
+			relay_set(i, false);
+		}
+
 		relay.monoflop_done[i] = true;
 	}
 
@@ -55,10 +61,19 @@ BootloaderHandleMessageResponse set_value(const SetValue *data) {
 
 BootloaderHandleMessageResponse get_value(const GetValue *data, GetValue_Response *response) {
 	response->header.length = sizeof(GetValue_Response);
-	response->value[0]      = relay_get(0);
-	response->value[1]      = relay_get(1);
-	response->value[2]      = relay_get(2);
-	response->value[3]      = relay_get(3);
+
+	uint8_t bit_encoded_values = 0;
+
+	for(uint8_t i = 0; i < RELAY_NUM; i++) {
+		if(relay_get(i)) {
+			bit_encoded_values |= (1 << i);
+		}
+		else {
+			bit_encoded_values &= ~(1 << i);
+		}
+	}
+
+	response->value = bit_encoded_values;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
