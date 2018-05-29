@@ -32,11 +32,11 @@ extern Relay relay;
 
 BootloaderHandleMessageResponse handle_message(const void *message, void *response) {
 	switch(tfp_get_fid_from_message(message)) {
-		case FID_SET_OUTPUT_VALUE: return set_output_value(message);
-		case FID_GET_OUTPUT_VALUE: return get_output_value(message, response);
+		case FID_SET_VALUE: return set_value(message);
+		case FID_GET_VALUE: return get_value(message, response);
 		case FID_SET_MONOFLOP: return set_monoflop(message);
 		case FID_GET_MONOFLOP: return get_monoflop(message, response);
-		case FID_SET_SELECTED_OUTPUT_VALUE: return set_selected_output_value(message);
+		case FID_SET_SELECTED_VALUE: return set_selected_value(message);
 		case FID_SET_CHANNEL_LED_CONFIG: return set_channel_led_config(message);
 		case FID_GET_CHANNEL_LED_CONFIG: return get_channel_led_config(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
@@ -44,7 +44,7 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 }
 
 
-BootloaderHandleMessageResponse set_output_value(const SetOutputValue *data) {
+BootloaderHandleMessageResponse set_value(const SetValue *data) {
 	for(uint8_t i = 0; i < RELAY_NUM; i++) {
 		relay_set(i, data->value[i]);
 		relay.monoflop_done[i] = true;
@@ -53,8 +53,8 @@ BootloaderHandleMessageResponse set_output_value(const SetOutputValue *data) {
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
-BootloaderHandleMessageResponse get_output_value(const GetOutputValue *data, GetOutputValue_Response *response) {
-	response->header.length = sizeof(GetOutputValue_Response);
+BootloaderHandleMessageResponse get_value(const GetValue *data, GetValue_Response *response) {
+	response->header.length = sizeof(GetValue_Response);
 	response->value[0]      = relay_get(0);
 	response->value[1]      = relay_get(1);
 	response->value[2]      = relay_get(2);
@@ -96,7 +96,7 @@ BootloaderHandleMessageResponse get_monoflop(const GetMonoflop *data, GetMonoflo
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
-BootloaderHandleMessageResponse set_selected_output_value(const SetSelectedOutputValue *data) {
+BootloaderHandleMessageResponse set_selected_value(const SetSelectedValue *data) {
 	if(data->channel > RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}

@@ -58,11 +58,11 @@ void communication_init(void);
 #define INDUSTRIAL_QUAD_RELAY_V2_STATUS_LED_CONFIG_SHOW_STATUS 3
 
 // Function and callback IDs and structs
-#define FID_SET_OUTPUT_VALUE 1
-#define FID_GET_OUTPUT_VALUE 2
+#define FID_SET_VALUE 1
+#define FID_GET_VALUE 2
 #define FID_SET_MONOFLOP 3
 #define FID_GET_MONOFLOP 4
-#define FID_SET_SELECTED_OUTPUT_VALUE 5
+#define FID_SET_SELECTED_VALUE 5
 #define FID_SET_CHANNEL_LED_CONFIG 6
 #define FID_GET_CHANNEL_LED_CONFIG 7
 
@@ -71,16 +71,16 @@ void communication_init(void);
 typedef struct {
 	TFPMessageHeader header;
 	bool value[4];
-} __attribute__((__packed__)) SetOutputValue;
+} __attribute__((__packed__)) SetValue;
 
 typedef struct {
 	TFPMessageHeader header;
-} __attribute__((__packed__)) GetOutputValue;
+} __attribute__((__packed__)) GetValue;
 
 typedef struct {
 	TFPMessageHeader header;
 	bool value[4];
-} __attribute__((__packed__)) GetOutputValue_Response;
+} __attribute__((__packed__)) GetValue_Response;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -105,7 +105,7 @@ typedef struct {
 	TFPMessageHeader header;
 	uint8_t channel;
 	bool value;
-} __attribute__((__packed__)) SetSelectedOutputValue;
+} __attribute__((__packed__)) SetSelectedValue;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -131,11 +131,11 @@ typedef struct {
 
 
 // Function prototypes
-BootloaderHandleMessageResponse set_output_value(const SetOutputValue *data);
-BootloaderHandleMessageResponse get_output_value(const GetOutputValue *data, GetOutputValue_Response *response);
+BootloaderHandleMessageResponse set_value(const SetValue *data);
+BootloaderHandleMessageResponse get_value(const GetValue *data, GetValue_Response *response);
 BootloaderHandleMessageResponse set_monoflop(const SetMonoflop *data);
 BootloaderHandleMessageResponse get_monoflop(const GetMonoflop *data, GetMonoflop_Response *response);
-BootloaderHandleMessageResponse set_selected_output_value(const SetSelectedOutputValue *data);
+BootloaderHandleMessageResponse set_selected_value(const SetSelectedValue *data);
 BootloaderHandleMessageResponse set_channel_led_config(const SetChannelLEDConfig *data);
 BootloaderHandleMessageResponse get_channel_led_config(const GetChannelLEDConfig *data, GetChannelLEDConfig_Response *response);
 
