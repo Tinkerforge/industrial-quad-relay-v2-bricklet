@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/tinkerforge/go-api-bindings/industrial_quad_relay_v2_bricklet"
-	"github.com/tinkerforge/go-api-bindings/ipconnection"
+	"github.com/Tinkerforge/go-api-bindings/industrial_quad_relay_v2_bricklet"
+	"github.com/Tinkerforge/go-api-bindings/ipconnection"
 	"time"
 )
 
