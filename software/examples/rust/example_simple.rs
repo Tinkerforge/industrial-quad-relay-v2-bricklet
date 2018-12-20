@@ -1,9 +1,5 @@
-use std::{io, error::Error};
-use std::thread;
-use std::time::Duration;
-use tinkerforge::{ip_connection::IpConnection, 
-                  industrial_quad_relay_v2_bricklet::*};
-
+use std::{error::Error, io, thread, time::Duration};
+use tinkerforge::{industrial_quad_relay_v2_bricklet::*, ip_connection::IpConnection};
 
 const HOST: &str = "localhost";
 const PORT: u16 = 4223;
@@ -14,19 +10,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     let iqr = IndustrialQuadRelayV2Bricklet::new(UID, &ipcon); // Create device object.
 
     ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
-    // Don't use device before ipcon is connected.
+                                          // Don't use device before ipcon is connected.
 
-		// Turn relays alternating on/off 10 times with 100 ms delay
-		for i in 0..10{
-			thread::sleep(Duration::from_millis(100));
-			iqr.set_value([true, false, false, false]);
-			thread::sleep(Duration::from_millis(100));
-			iqr.set_value([false, true, false, false]);
-			thread::sleep(Duration::from_millis(100));
-			iqr.set_value([false, false, true, false]);
-			thread::sleep(Duration::from_millis(100));
-			iqr.set_value([false, false, false, true]);
-		}
+    // Turn relays alternating on/off 10 times with 100 ms delay
+    for i in 0..10 {
+        thread::sleep(Duration::from_millis(100));
+        iqr.set_value([true, false, false, false]);
+        thread::sleep(Duration::from_millis(100));
+        iqr.set_value([false, true, false, false]);
+        thread::sleep(Duration::from_millis(100));
+        iqr.set_value([false, false, true, false]);
+        thread::sleep(Duration::from_millis(100));
+        iqr.set_value([false, false, false, true]);
+    }
 
     println!("Press enter to exit.");
     let mut _input = String::new();
