@@ -29,13 +29,17 @@ int main(void) {
 	int i;
 	for(i = 0; i < 10; ++i) {
 		millisleep(100);
-		industrial_quad_relay_v2_set_value(&iqr, (bool[]){true, false, false, false});
+		bool value[4] = {true, false, false, false};
+		industrial_quad_relay_v2_set_value(&iqr, value);
 		millisleep(100);
-		industrial_quad_relay_v2_set_value(&iqr, (bool[]){false, true, false, false});
+		bool value_1[4] = {false, true, false, false};
+		industrial_quad_relay_v2_set_value(&iqr, value_1);
 		millisleep(100);
-		industrial_quad_relay_v2_set_value(&iqr, (bool[]){false, false, true, false});
+		bool value_2[4] = {false, false, true, false};
+		industrial_quad_relay_v2_set_value(&iqr, value_2);
 		millisleep(100);
-		industrial_quad_relay_v2_set_value(&iqr, (bool[]){false, false, false, true});
+		bool value_3[4] = {false, false, false, true};
+		industrial_quad_relay_v2_set_value(&iqr, value_3);
 	}
 
 	printf("Press key to exit\n");
