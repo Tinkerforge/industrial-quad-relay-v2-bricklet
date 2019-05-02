@@ -79,7 +79,7 @@ BootloaderHandleMessageResponse get_value(const GetValue *data, GetValue_Respons
 }
 
 BootloaderHandleMessageResponse set_monoflop(const SetMonoflop *data) {
-	if(data->channel > RELAY_NUM) {
+	if(data->channel >= RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
@@ -94,7 +94,7 @@ BootloaderHandleMessageResponse set_monoflop(const SetMonoflop *data) {
 }
 
 BootloaderHandleMessageResponse get_monoflop(const GetMonoflop *data, GetMonoflop_Response *response) {
-	if(data->channel > RELAY_NUM) {
+	if(data->channel >= RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
@@ -112,7 +112,7 @@ BootloaderHandleMessageResponse get_monoflop(const GetMonoflop *data, GetMonoflo
 }
 
 BootloaderHandleMessageResponse set_selected_value(const SetSelectedValue *data) {
-	if(data->channel > RELAY_NUM) {
+	if(data->channel >= RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
@@ -123,7 +123,7 @@ BootloaderHandleMessageResponse set_selected_value(const SetSelectedValue *data)
 }
 
 BootloaderHandleMessageResponse set_channel_led_config(const SetChannelLEDConfig *data) {
-	if(data->led > RELAY_NUM - 1) {
+	if(data->led >= RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
@@ -133,12 +133,11 @@ BootloaderHandleMessageResponse set_channel_led_config(const SetChannelLEDConfig
 }
 
 BootloaderHandleMessageResponse get_channel_led_config(const GetChannelLEDConfig *data, GetChannelLEDConfig_Response *response) {
-	response->header.length = sizeof(GetChannelLEDConfig_Response);
-
-	if(data->led > RELAY_NUM - 1) {
+	if(data->led >= RELAY_NUM) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
+	response->header.length = sizeof(GetChannelLEDConfig_Response);
 	response->config = relay.channel_leds[data->led].config;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
