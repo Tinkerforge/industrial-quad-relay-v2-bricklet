@@ -22,6 +22,7 @@
 #include "communication.h"
 
 #include "bricklib2/utility/communication_callback.h"
+#include "bricklib2/utility/util_definitions.h"
 #include "bricklib2/protocols/tfp/tfp.h"
 #include "bricklib2/hal/system_timer/system_timer.h"
 
@@ -42,7 +43,6 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
-
 
 BootloaderHandleMessageResponse set_value(const SetValue *data) {
 	for(uint8_t i = 0; i < RELAY_NUM; i++) {
@@ -86,7 +86,6 @@ BootloaderHandleMessageResponse set_monoflop(const SetMonoflop *data) {
 	relay.monoflop_done[data->channel]       = false;
 	relay.monoflop_time_start[data->channel] = system_timer_get_ms();
 	relay.monoflop_time[data->channel]       = data->time;
-	relay.monoflop_value[data->channel]      = data->value;
 
 	relay_set(data->channel, data->value);
 
@@ -98,9 +97,11 @@ BootloaderHandleMessageResponse get_monoflop(const GetMonoflop *data, GetMonoflo
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	uint32_t diff = system_timer_get_ms() - relay.monoflop_time_start[data->channel];
-	if((relay.monoflop_done[data->channel]) || (relay.monoflop_time[data->channel] == 0)) {
-		diff = 0;
+	uint32_t diff = 0;
+
+	if(!relay.monoflop_done[data->channel]) {
+		diff = system_timer_get_ms() - relay.monoflop_time_start[data->channel];
+		diff = MAX(0, relay.monoflop_time[data->channel] - diff);
 	}
 
 	response->header.length  = sizeof(GetMonoflop_Response);

@@ -80,7 +80,7 @@ void relay_tick(void) {
 	for(uint8_t i = 0; i < RELAY_NUM; i++) {
 		if(!relay.monoflop_done[i]) {
 			if(system_timer_is_time_elapsed_ms(relay.monoflop_time_start[i], relay.monoflop_time[i])) {
-				relay_set(i, !relay.monoflop_value[i]);
+				relay_set(i, !relay_get(i));
 				relay.monoflop_callback[i] = true;
 				relay.monoflop_done[i]     = true;
 			}

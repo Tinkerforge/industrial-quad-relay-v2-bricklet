@@ -42,7 +42,6 @@ typedef struct {
 typedef struct {
 	uint32_t monoflop_time[RELAY_NUM];
 	uint32_t monoflop_time_start[RELAY_NUM];
-	bool monoflop_value[RELAY_NUM];
 	bool monoflop_done[RELAY_NUM];
 	bool monoflop_callback[RELAY_NUM];
 	CHANNEL_LED_CONFIG_t channel_leds[RELAY_NUM];

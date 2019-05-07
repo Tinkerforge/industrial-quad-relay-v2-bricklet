@@ -3,3 +3,6 @@
 
 2018-10-04: 2.0.1 (979f5a9)
 - Fix race condition with potential buffer overflow (through bricklib2)
+
+2019-05-07: 2.0.2 (<unknown>)
+- Make monoflop time-remaining count down instead of up
