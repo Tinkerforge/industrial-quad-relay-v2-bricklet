@@ -6,3 +6,6 @@
 
 2019-05-07: 2.0.2 (<unknown>)
 - Make monoflop time-remaining count down instead of up
+
+2019-05-29: 2.0.3 (TBD)
+- Fix SPITFP IRQ race condition with other higher prio IRQs (through bricklib2)
