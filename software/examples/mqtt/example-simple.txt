@@ -2,7 +2,7 @@
 
 setup:
 	# Turn relays alternating on/off 10 times with 100 ms delay
-	for i in 0 1 2 3 4 5 6 7 8 9; do
+	for i in 0..9
 
 		wait for 0.1s
 
@@ -20,4 +20,4 @@ setup:
 
 		publish '{"value": [false,false,false,true]}' to tinkerforge/request/industrial_quad_relay_v2_bricklet/XYZ/set_value
 
-	done
+	endfor
