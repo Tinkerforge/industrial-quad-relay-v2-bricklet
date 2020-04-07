@@ -15,13 +15,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Turn relays alternating on/off 10 times with 100 ms delay
     for _i in 0..10 {
         thread::sleep(Duration::from_millis(100));
-        iqr.set_value([true, false, false, false]);
+        iqr.set_value([true, false, false, false]).recv()?;
         thread::sleep(Duration::from_millis(100));
-        iqr.set_value([false, true, false, false]);
+        iqr.set_value([false, true, false, false]).recv()?;
         thread::sleep(Duration::from_millis(100));
-        iqr.set_value([false, false, true, false]);
+        iqr.set_value([false, false, true, false]).recv()?;
         thread::sleep(Duration::from_millis(100));
-        iqr.set_value([false, false, false, true]);
+        iqr.set_value([false, false, false, true]).recv()?;
     }
 
     println!("Press enter to exit.");
